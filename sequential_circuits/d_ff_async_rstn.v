@@ -1,13 +1,13 @@
 `timescale 1us/1ns
 
-module tb_d_dff_rstn();
+module tb_d_ff_async_rstn();
 
 	logic reset_n, clk = 0, d;
 	wire q, q_not;
 	logic[1:0] delay;
 	integer i;
 
-	d_ff_sync_rstn D_FF(
+	d_ff_async_rstn D_FF(
 		.reset_n(reset_n), .clk(clk), .d(d),
 		.q(q),.q_not(q_not));
 
@@ -44,14 +44,14 @@ module tb_d_dff_rstn();
 	end
 endmodule
 
-module d_ff_sync_rstn(
+module d_ff_async_rstn(
 	input reset_n,
 	input clk,
 	input d,
 	output logic q,
 	output q_not
 	);
-	always @(posedge clk) begin
+	always @(posedge clk or negedge reset_n) begin
 		if(!reset_n) begin
 			q <= 1'b0;
 		end else begin
